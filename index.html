@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>벨빈 팀 역할 — 행동 체크리스트</title>
+<style>
+  :root {
+    --green: #1A6B3A;
+    --green-light: #E8F5EC;
+    --green-mid: #2E8B57;
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --orange: #C55A00;
+    --orange-light: #FEF0E6;
+    --gray-bg: #F7F7F5;
+    --gray-border: #E0DED8;
+    --gray-text: #6B6B68;
+    --text: #1A1A18;
+    --text2: #4A4A47;
+    --white: #FFFFFF;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+    background: var(--gray-bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+  }
+  .container { width: 100%; max-width: 640px; }
+  .logo-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+  .logo-badge {
+    background: var(--green);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: .04em;
+    padding: 5px 12px;
+    border-radius: 6px;
+  }
+  .logo-sub { font-size: 14px; color: var(--gray-text); }
+
+  /* ── 인트로 화면 ── */
+  .intro-card {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+  .intro-hero {
+    background: var(--green);
+    padding: 1.6rem 1.5rem 1.4rem;
+  }
+  .intro-hero-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: .4rem;
+    line-height: 1.4;
+  }
+  .intro-hero-sub {
+    font-size: 13.5px;
+    color: rgba(255,255,255,.8);
+    line-height: 1.6;
+  }
+  .intro-body { padding: 1.25rem 1.4rem; }
+  .intro-section { margin-bottom: 1.1rem; }
+  .intro-section:last-child { margin-bottom: 0; }
+  .intro-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: .05em;
+    margin-bottom: .5rem;
+    text-transform: uppercase;
+  }
+  .intro-list { list-style: none; padding: 0; }
+  .intro-list li {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+    padding: .25rem 0 .25rem 1.1rem;
+    position: relative;
+  }
+  .intro-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-size: 12px;
+    top: .35rem;
+  }
+  .warn-box {
+    background: var(--orange-light);
+    border: 1px solid #F5C8A0;
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.1rem;
+  }
+  .warn-box-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: .5rem;
+  }
+  .warn-list { list-style: none; padding: 0; }
+  .warn-list li {
+    font-size: 13px;
+    color: #7A3800;
+    line-height: 1.65;
+    padding: .2rem 0 .2rem 1.1rem;
+    position: relative;
+  }
+  .warn-list li::before {
+    content: '!';
+    position: absolute;
+    left: 0;
+    color: var(--orange);
+    font-weight: 700;
+    font-size: 12px;
+    top: .3rem;
+  }
+  .intro-footer {
+    border-top: 1px solid var(--gray-border);
+    padding: 1rem 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .intro-footer-note {
+    font-size: 12.5px;
+    color: var(--gray-text);
+    line-height: 1.5;
+  }
+
+  /* ── 문항 화면 ── */
+  .top-notice {
+    font-size: 12.5px;
+    color: var(--orange);
+    background: var(--orange-light);
+    border: 1px solid #F5C8A0;
+    padding: 8px 13px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.1rem;
+    line-height: 1.5;
+  }
+  .progress-wrap { margin-bottom: 1.25rem; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--gray-text);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--gray-border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 99px;
+    transition: width .35s ease;
+  }
+  .scenario-card {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.4rem 1.1rem;
+    margin-bottom: 1.1rem;
+  }
+  .scenario-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    background: var(--green-light);
+    border-radius: 99px;
+    padding: 3px 10px;
+    display: inline-block;
+    margin-bottom: .8rem;
+    letter-spacing: .02em;
+  }
+  .scenario-q {
+    font-size: 15.5px;
+    color: var(--text);
+    font-weight: 600;
+    line-height: 1.55;
+    margin-bottom: 1.1rem;
+  }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px 13px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-border);
+    background: #fff;
+    transition: background .12s, border-color .12s;
+    text-align: left;
+    width: 100%;
+    font-family: inherit;
+  }
+  .opt:hover { background: var(--gray-bg); border-color: #C8C7C1; }
+  .opt.selected { background: var(--blue-light); border-color: var(--blue); }
+  .opt-radio {
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-border);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .12s;
+  }
+  .opt.selected .opt-radio { border-color: var(--blue); background: var(--blue); }
+  .opt.selected .opt-radio::after {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .opt-text { font-size: 14px; color: var(--text2); line-height: 1.55; }
+  .opt.selected .opt-text { color: var(--blue); }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  .nav-info { font-size: 13px; color: var(--gray-text); }
+  button {
+    cursor: pointer;
+    padding: 9px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid var(--gray-border);
+    background: #fff;
+    color: var(--text2);
+    transition: background .12s, opacity .12s;
+    font-family: inherit;
+  }
+  button:hover { background: var(--gray-bg); }
+  button.primary {
+    background: var(--green);
+    color: #fff;
+    border-color: var(--green);
+  }
+  button.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* ── 결과 화면 ── */
+  .result-title { font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: .4rem; }
+  .result-sub { font-size: 14px; color: var(--gray-text); margin-bottom: 1.25rem; line-height: 1.6; }
+  .top-roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.1rem; }
+  .top-card {
+    background: #fff;
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+  }
+  .top-card.rank1 { border-color: var(--green); border-width: 2px; }
+  .top-badge {
+    font-size: 11px; font-weight: 600;
+    padding: 2px 9px; border-radius: 99px;
+    display: inline-block; margin-bottom: .5rem;
+  }
+  .top-badge.r1 { background: var(--green-light); color: var(--green); }
+  .top-badge.r2 { background: var(--gray-bg); color: var(--gray-text); }
+  .top-role-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: .25rem; }
+  .top-role-en { font-size: 11px; color: var(--gray-text); margin-bottom: .4rem; }
+  .top-role-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .bars-section {
+    background: #fff;
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.1rem;
+  }
+  .bars-title { font-size: 13px; font-weight: 600; color: var(--gray-text); margin-bottom: .9rem; }
+  .role-bar-wrap { margin-bottom: .75rem; }
+  .role-bar-wrap:last-child { margin-bottom: 0; }
+  .role-bar-label {
+    display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;
+  }
+  .role-name-text { font-size: 13px; font-weight: 600; color: var(--text); }
+  .role-code { font-size: 11px; color: var(--gray-text); font-weight: 400; margin-left: 4px; }
+  .role-score-text { font-size: 12px; color: var(--gray-text); }
+  .bar-bg { height: 8px; background: var(--gray-bg); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; transition: width .6s ease; }
+
+  /* ── 결과 하단 가이드 박스 ── */
+  .guide-box {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1.1rem;
+  }
+  .guide-box-header {
+    background: var(--orange-light);
+    border-bottom: 1px solid #F5C8A0;
+    padding: .75rem 1.25rem;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .guide-box-body { padding: 1rem 1.25rem; }
+  .guide-item {
+    display: flex;
+    gap: 10px;
+    padding: .6rem 0;
+    border-bottom: 1px solid var(--gray-bg);
+  }
+  .guide-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .guide-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .guide-item-text { font-size: 13.5px; color: var(--text2); line-height: 1.6; }
+  .guide-item-text strong { color: var(--text); }
+
+  .cta-box {
+    background: var(--green-light);
+    border: 1px solid #A8D8B8;
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .cta-box-title {
+    font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: .4rem;
+  }
+  .cta-box-text {
+    font-size: 13.5px; color: #2A5A3A; line-height: 1.65; margin-bottom: .75rem;
+  }
+  .cta-link {
+    display: inline-block;
+    font-size: 13px; font-weight: 600;
+    color: var(--green);
+    background: #fff;
+    border: 1px solid #A8D8B8;
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    text-decoration: none;
+  }
+  .cta-link:hover { background: var(--green-light); }
+  .restart-wrap { text-align: center; }
+
+  @media (max-width: 480px) {
+    .top-roles { grid-template-columns: 1fr; }
+    body { padding: 1.25rem .75rem 3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo-bar">
+    <span class="logo-badge">BELBIN®</span>
+    <span class="logo-sub">팀 역할 행동 체크리스트</span>
+  </div>
+  <div id="app"></div>
+</div>
+
+<script>
+const ROLES = {
+  PL:  { name:"창조자",      en:"Plant",                 color:"#639922", desc:"아이디어 발굴, 창의적 문제해결이 강점" },
+  ME:  { name:"냉철판단자",  en:"Monitor Evaluator",     color:"#888780", desc:"논리적 분석, 모든 안을 살피고 정확히 판단" },
+  CO:  { name:"지휘조절자",  en:"Co-ordinator",          color:"#378ADD", desc:"목표 명확화, 팀원 재능 발굴 및 위임" },
+  SH:  { name:"추진자",      en:"Shaper",                color:"#D85A30", desc:"도전적 추진력, 장애 극복 및 결과 지향" },
+  IMP: { name:"실행자",      en:"Implementer",           color:"#185FA5", desc:"아이디어를 실행에 옮기는 신뢰할 수 있는 실무형" },
+  CF:  { name:"완결자",      en:"Completer Finisher",    color:"#854F0B", desc:"실수·누락 없이 마무리하는 꼼꼼한 완성형" },
+  TW:  { name:"분위기조성자",en:"Teamworker",            color:"#3B6D11", desc:"협력적·외교적, 팀 화합과 갈등 조율" },
+  RI:  { name:"자원탐색가",  en:"Resource Investigator", color:"#993556", desc:"외향적 열정, 기회 발굴 및 외부 네트워크" },
+  SP:  { name:"전문가",      en:"Specialist",            color:"#534AB7", desc:"전문 분야 깊은 지식과 헌신" },
+};
+
+const QS = [
+  {
+    tag: "상황 1 — 새 프로젝트 킥오프 회의",
+    q: "팀이 처음 모여 새 프로젝트 방향을 논의합니다. 나는 주로…",
+    opts: [
+      { text: "'이런 방식은 어떨까요?' 하며 아직 아무도 생각 못 한 아이디어를 꺼낸다", roles: {PL:3} },
+      { text: "'잠깐, 이 방향의 리스크는 무엇인지 따져봐야 해요'라며 검토가 필요한 부분을 짚는다", roles: {ME:3} },
+      { text: "'우리 목표를 먼저 정리하고, 각자 잘할 수 있는 역할을 나눠봅시다'라며 구조를 잡는다", roles: {CO:3} },
+      { text: "'일단 시작하죠, 너무 오래 논의만 하면 안 됩니다'라며 빠른 실행을 촉구한다", roles: {SH:3} },
+      { text: "외부 사례나 관련 정보를 이미 찾아왔거나, 아는 사람을 연결해주겠다고 한다", roles: {RI:3} },
+    ]
+  },
+  {
+    tag: "상황 2 — 업무 진행 중",
+    q: "프로젝트가 진행되는 동안, 내가 가장 자연스럽게 하는 행동은…",
+    opts: [
+      { text: "계획대로 체계적으로 실행하고, 진행 상황을 꼼꼼히 추적한다", roles: {IMP:3} },
+      { text: "팀원 중 힘든 사람이 있으면 먼저 알아채고, 분위기를 살핀다", roles: {TW:3} },
+      { text: "내 전문 분야의 깊이 있는 정보를 제공하고, 기술적 문제를 해결한다", roles: {SP:3} },
+      { text: "마감이 가까워지면 빠진 것이 없는지 전체를 다시 한 번 검토한다", roles: {CF:3} },
+      { text: "새로운 문제가 생기면 기존 방식 대신 다른 해결책을 제안한다", roles: {PL:2, ME:1} },
+    ]
+  },
+  {
+    tag: "상황 3 — 팀 내 의견 충돌",
+    q: "팀원 사이에 의견이 갈리고 분위기가 어색해졌습니다. 나는…",
+    opts: [
+      { text: "각자의 의견을 정리해주고, 공통점을 찾아 합의점으로 이끈다", roles: {CO:2, TW:1} },
+      { text: "'어떤 안이 더 논리적으로 타당한지 데이터로 따져봅시다'라며 객관적 기준을 제시한다", roles: {ME:3} },
+      { text: "분위기를 부드럽게 만들기 위해 유머나 공감 발언으로 긴장을 완화한다", roles: {TW:3} },
+      { text: "충돌이 생산적이 되도록 더 직접적으로 쟁점을 드러내고 해결을 밀어붙인다", roles: {SH:2, CO:1} },
+      { text: "양쪽 모두 맞는 부분이 있으니 일단 기록해두고 다음에 다시 논의하자고 한다", roles: {IMP:1, TW:2} },
+    ]
+  },
+  {
+    tag: "상황 4 — 마감 직전",
+    q: "마감이 이틀 남았고 아직 마무리가 덜 됐습니다. 나는…",
+    opts: [
+      { text: "오탈자, 수치 오류, 빠진 항목까지 꼼꼼히 체크하며 완성도를 높인다", roles: {CF:3} },
+      { text: "우선순위를 빠르게 정리하고, 팀원에게 역할을 나눠 집중하게 한다", roles: {CO:2, SH:1} },
+      { text: "이미 계획된 순서대로 하나씩 실행하며 끝까지 묵묵히 진행한다", roles: {IMP:3} },
+      { text: "'이 방식 대신 더 빠른 방법이 있어요'라며 새로운 접근을 제안한다", roles: {PL:2, SH:1} },
+      { text: "지쳐가는 팀원들을 격려하고, 모두가 끝까지 함께 갈 수 있도록 챙긴다", roles: {TW:3} },
+    ]
+  },
+  {
+    tag: "상황 5 — 결과 검토 & 다음 단계",
+    q: "프로젝트가 끝난 후 회고 시간입니다. 내가 자연스럽게 하는 것은…",
+    opts: [
+      { text: "잘된 것과 개선할 것을 명확히 분석하고, 다음에 더 잘할 수 있는 방향을 논리적으로 정리한다", roles: {ME:3} },
+      { text: "팀이 이번에 어떻게 협력했는지, 관계는 어떠했는지를 중심으로 이야기한다", roles: {TW:2, CO:1} },
+      { text: "다음 프로젝트에서 쓸 수 있는 새로운 아이디어나 더 나은 방식을 이미 생각하고 있다", roles: {PL:2, RI:1} },
+      { text: "문서, 체크리스트, 프로세스를 정리해서 다음 번에 재사용할 수 있게 만든다", roles: {IMP:2, CF:1} },
+      { text: "이번 성과를 외부에 알리거나, 배운 것을 다른 사람과 공유하고 싶다는 생각이 든다", roles: {RI:2, SP:1} },
+    ]
+  },
+];
+
+let current = 0;
+let answers = {};
+let phase = 'intro';
+
+function getApp() { return document.getElementById('app'); }
+
+function renderIntro() {
+  phase = 'intro';
+  getApp().innerHTML = `
+    <div class="intro-card">
+      <div class="intro-hero">
+        <div class="intro-hero-title">나의 팀 역할 행동 탐색</div>
+        <div class="intro-hero-sub">5가지 팀 상황에서 내가 자연스럽게 하는 행동을 선택해 보세요.<br>벨빈 팀 역할에 대한 나만의 출발점을 찾을 수 있습니다.</div>
+      </div>
+      <div class="intro-body">
+        <div class="intro-section">
+          <div class="intro-section-title">이 체크리스트로 할 수 있는 것</div>
+          <ul class="intro-list">
+            <li>9가지 벨빈 팀 역할 중 나의 행동 경향 탐색하기</li>
+            <li>워크숍 활동(TEAM in ME)의 출발점으로 활용하기</li>
+            <li>팀원들과 각자의 행동 패턴을 비교하며 대화 나누기</li>
+          </ul>
+        </div>
+        <div class="intro-section">
+          <div class="warn-box">
+            <div class="warn-box-title">⚠ 시작 전 꼭 읽어주세요</div>
+            <ul class="warn-list">
+              <li>이 체크리스트는 <strong>정식 벨빈 진단이 아닙니다.</strong> 간편 진단으로 오해하지 마세요.</li>
+              <li>정식 진단은 7개 섹션 문항 + <strong>관찰자(동료) 피드백</strong>을 포함합니다. 이 체크리스트에는 관찰자 관점이 빠져 있어 결과가 다를 수 있습니다.</li>
+              <li>실제로 나를 잘 아는 동료가 보는 내 모습은 지금 선택과 <strong>완전히 다를 수 있습니다.</strong> 그 차이를 확인하는 것이 정식 진단의 핵심 가치입니다.</li>
+              <li>결과는 <strong>'지금 이 순간의 자기 인식'</strong>으로만 참고하고, 고정된 나의 유형으로 단정 짓지 마세요.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="intro-footer">
+        <div class="intro-footer-note">소요 시간 약 3분 · 총 5문항</div>
+        <button class="primary" onclick="startQuiz()">시작하기 →</button>
+      </div>
+    </div>
+  `;
+}
+
+function startQuiz() {
+  phase = 'quiz';
+  current = 0;
+  answers = {};
+  renderQuestion(0);
+}
+
+function renderQuestion(idx) {
+  const q = QS[idx];
+  const pct = Math.round((idx / QS.length) * 100);
+  const selected = answers[idx];
+
+  const optionsHTML = q.opts.map((o, i) => `
+    <button class="opt${selected === i ? ' selected' : ''}" onclick="selectOpt(${idx}, ${i})">
+      <div class="opt-radio"></div>
+      <span class="opt-text">${o.text}</span>
+    </button>
+  `).join('');
+
+  getApp().innerHTML = `
+    <div class="top-notice">
+      ⚠ 이 체크리스트는 정식 벨빈 진단이 아닙니다. 결과는 대화의 출발점으로만 활용해 주세요.
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span>질문 ${idx + 1} / ${QS.length}</span>
+        <span>${pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="scenario-card">
+      <div class="scenario-tag">${q.tag}</div>
+      <div class="scenario-q">${q.q}</div>
+      <div class="options">${optionsHTML}</div>
+    </div>
+    <div class="nav">
+      <button onclick="goBack()">← 이전</button>
+      <span class="nav-info">${idx + 1} / ${QS.length}</span>
+      <button class="primary" onclick="goNext()" ${selected === undefined ? 'disabled' : ''}>
+        ${idx === QS.length - 1 ? '결과 보기 →' : '다음 →'}
+      </button>
+    </div>
+  `;
+}
+
+function selectOpt(qIdx, optIdx) {
+  answers[qIdx] = optIdx;
+  renderQuestion(qIdx);
+}
+
+function goNext() {
+  if (answers[current] === undefined) return;
+  if (current < QS.length - 1) { current++; renderQuestion(current); }
+  else renderResult();
+}
+
+function goBack() {
+  if (current > 0) { current--; renderQuestion(current); }
+  else renderIntro();
+}
+
+function calcScores() {
+  const scores = {};
+  Object.keys(ROLES).forEach(r => scores[r] = 0);
+  Object.entries(answers).forEach(([qi, oi]) => {
+    const rolePts = QS[parseInt(qi)].opts[oi].roles;
+    Object.entries(rolePts).forEach(([r, v]) => scores[r] = (scores[r] || 0) + v);
+  });
+  return scores;
+}
+
+function renderResult() {
+  const scores = calcScores();
+  const maxPossible = QS.length * 3;
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const top2 = sorted.slice(0, 2);
+
+  const topCardsHTML = top2.map(([r, s], i) => `
+    <div class="top-card${i === 0 ? ' rank1' : ''}">
+      <div class="top-badge ${i === 0 ? 'r1' : 'r2'}">${i === 0 ? '1순위 경향' : '2순위 경향'}</div>
+      <div class="top-role-name">${ROLES[r].name} (${r})</div>
+      <div class="top-role-en">${ROLES[r].en}</div>
+      <div class="top-role-desc">${ROLES[r].desc}</div>
+    </div>
+  `).join('');
+
+  const barsHTML = sorted.map(([r, s]) => {
+    const pct = Math.round((s / maxPossible) * 100);
+    return `
+      <div class="role-bar-wrap">
+        <div class="role-bar-label">
+          <span class="role-name-text">${ROLES[r].name}<span class="role-code">${r}</span></span>
+          <span class="role-score-text">${s}점</span>
+        </div>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:${pct}%; background:${ROLES[r].color}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  getApp().innerHTML = `
+    <div class="result-title">나의 행동 패턴 탐색 결과</div>
+    <div class="result-sub">5가지 상황에서의 행동 선택을 바탕으로 나타난 경향입니다.</div>
+    <div class="top-roles">${topCardsHTML}</div>
+    <div class="bars-section">
+      <div class="bars-title">전체 역할 점수 분포</div>
+      ${barsHTML}
+    </div>
+
+    <div class="guide-box">
+      <div class="guide-box-header">⚠ 이 결과를 올바르게 활용하는 방법</div>
+      <div class="guide-box-body">
+        <div class="guide-item">
+          <div class="guide-icon">🔍</div>
+          <div class="guide-item-text">
+            <strong>이것은 자기 인식 탐색입니다.</strong> 지금 선택한 행동은 '내가 생각하는 나'의 모습입니다. 정식 벨빈 진단에서는 동료 관찰자들이 나를 어떻게 보는지가 함께 측정되며, 그 결과가 지금과 완전히 다를 수 있습니다.
+          </div>
+        </div>
+        <div class="guide-item">
+          <div class="guide-icon">🚫</div>
+          <div class="guide-item-text">
+            <strong>결과를 고정된 유형으로 단정 짓지 마세요.</strong> 벨빈 팀 역할은 상황과 맥락에 따라 달라집니다. "나는 창조자야"처럼 하나의 역할로 자신을 규정하면 오히려 성장을 제한할 수 있습니다.
+          </div>
+        </div>
+        <div class="guide-item">
+          <div class="guide-icon">💬</div>
+          <div class="guide-item-text">
+            <strong>팀원과 결과를 비교해 대화를 시작해 보세요.</strong> "나는 이렇게 나왔는데, 너는 나를 어떻게 봐?" 이 질문 하나가 정식 진단으로 이어지는 가장 좋은 출발점입니다.
+          </div>
+        </div>
+        <div class="guide-item">
+          <div class="guide-icon">📋</div>
+          <div class="guide-item-text">
+            <strong>정식 진단과의 차이가 핵심입니다.</strong> 5문항 체크리스트로 나온 결과와 관찰자 피드백이 포함된 정식 진단 결과가 얼마나 다른지 확인하는 것 — 그것이 벨빈이 가장 강조하는 자기 성찰의 시작입니다.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <div class="cta-box-title">정식 벨빈 진단을 받아보고 싶다면</div>
+      <div class="cta-box-text">
+        정식 진단은 7개 섹션 문항 + 동료 관찰자 피드백으로 구성됩니다.<br>
+        지금 이 결과가 동료 눈에도 같게 보이는지 확인해 보세요.
+      </div>
+      <a class="cta-link" href="https://www.belbinkorea.com" target="_blank">벨빈 코리아 공식 진단 →</a>
+    </div>
+
+    <div class="restart-wrap">
+      <button onclick="renderIntro()">← 처음으로 돌아가기</button>
+    </div>
+  `;
+}
+
+renderIntro();
+</script>
+</body>
+</html>
